@@ -1,6 +1,7 @@
 package org.example;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -409,6 +410,31 @@ public class Batallon {
             }
         }
     }
+
+
+
+    public LinkedList<Vehiculo> getVehiculosPorAnioOrdenados(int anio) {
+        LinkedList<Vehiculo> resultado = new LinkedList<>();
+
+        // Filtrar cada lista
+        for (VehiculoTransporteTropa v : listVehiculosTransporteTropa) {
+            if (v.getAnioFabricacion() == anio) resultado.add(v);
+        }
+        for (VehiculoBlindado v : listVehiculosBlindados) {
+            if (v.getAnioFabricacion() == anio) resultado.add(v);
+        }
+        for (VehiculoApoyo v : listVehiculosApoyo) {
+            if (v.getAnioFabricacion() == anio) resultado.add(v);
+        }
+
+        // Ordenar por tipo de vehículo (nombre de clase) y modelo
+        resultado.sort(Comparator
+                .comparing((Vehiculo v) -> v.getClass().getSimpleName())
+                .thenComparing(Vehiculo::getModelo));
+
+        return resultado;
+    }
+
 
 }
 

@@ -49,12 +49,12 @@ public class Main {
         batallon.agregarVehiculoTransporte(new VehiculoTransporteTropa("VT006", "Transporte Tropa Modelo F", 2015, 14000, EstadoOperativo.EN_MISION, 50));
 
         // Registrar vehículos blindados
-        batallon.agregarVehiculoBlindado(new VehiculoBlindado("VB001", "Blindado Modelo A", 2010, 25000, EstadoOperativo.DISPONIBLE, 3));
+        batallon.agregarVehiculoBlindado(new VehiculoBlindado("VB001", "Blindado Modelo A", 2015, 25000, EstadoOperativo.DISPONIBLE, 3));
         batallon.agregarVehiculoBlindado(new VehiculoBlindado("VB002", "Blindado Modelo B", 2012, 30000, EstadoOperativo.EN_MANTENIMIENTO, 0));
         batallon.agregarVehiculoBlindado(new VehiculoBlindado("VB003", "Blindado Modelo C", 2015, 55000, EstadoOperativo.EN_MISION, 1));
         batallon.agregarVehiculoBlindado(new VehiculoBlindado("VB004", "Blindado Modelo D", 2011, 85000, EstadoOperativo.DISPONIBLE, 2));
         batallon.agregarVehiculoBlindado(new VehiculoBlindado("VB005", "Blindado Modelo E", 2016, 45000, EstadoOperativo.DISPONIBLE, 3));
-        batallon.agregarVehiculoBlindado(new VehiculoBlindado("VB006", "Blindado Modelo A", 2010, 25000, EstadoOperativo.DISPONIBLE, 60));
+        batallon.agregarVehiculoBlindado(new VehiculoBlindado("VB006", "Blindado Modelo A", 2015, 25000, EstadoOperativo.DISPONIBLE, 60));
 
         // Registrar vehículos de apoyo
         batallon.agregarVehiculoApoyo(new VehiculoApoyo("VA001", "Apoyo Modelo A", 2015, 15000, EstadoOperativo.DISPONIBLE, TipoFuncion.COMUNICACIONES));
@@ -62,7 +62,7 @@ public class Main {
         batallon.agregarVehiculoApoyo(new VehiculoApoyo("VA003", "Apoyo Modelo C", 2014, 19000, EstadoOperativo.EN_MANTENIMIENTO, TipoFuncion.MEDICO));
         batallon.agregarVehiculoApoyo(new VehiculoApoyo("VA004", "Apoyo Modelo D", 2019, 11000, EstadoOperativo.DISPONIBLE, TipoFuncion.COMUNICACIONES));
         batallon.agregarVehiculoApoyo(new VehiculoApoyo("VA005", "Apoyo Modelo E", 2021, 14600, EstadoOperativo.EN_MISION, TipoFuncion.LOGISTICA));
-        batallon.agregarVehiculoApoyo(new VehiculoApoyo("VA006", "Apoyo Modelo F", 2012, 17000, EstadoOperativo.EN_MANTENIMIENTO, TipoFuncion.MEDICO));
+        batallon.agregarVehiculoApoyo(new VehiculoApoyo("VA006", "Apoyo Modelo F", 2015, 17000, EstadoOperativo.EN_MANTENIMIENTO, TipoFuncion.MEDICO));
 
         // Registrar misiones (el método ya genera automáticamente el ID)
         batallon.registrarMision(LocalDate.of(2023, 10, 1), "Zona de conflicto norte", 30, "VT001");
@@ -96,6 +96,19 @@ public class Main {
         Vehiculo masActivo = batallon.getVehiculoConMasMisiones();
         System.out.println("\nVehículo con más misiones: ID " + masActivo.getId() +
                 ", Misiones completadas: " + masActivo.getMisionesCompletadas());
+
+        // metodo mostrar vehiculos por año de fabricacion
+        LinkedList<Vehiculo> vehiculos2015 = batallon.getVehiculosPorAnioOrdenados(2015);
+        System.out.println("Vehículos fabricados en 2015:");
+        for (Vehiculo v : vehiculos2015) {
+            System.out.println(v.getClass().getSimpleName() + " - Modelo: " + v.getModelo() + " (ID: " + v.getId() + ")");
+        }
+
     }
+
+
+
+
+
 }
 
