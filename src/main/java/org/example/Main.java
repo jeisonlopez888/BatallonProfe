@@ -44,41 +44,72 @@ public class Main {
         batallon.agregarVehiculoTransporte(new VehiculoTransporteTropa("VT001", "Transporte Tropa Modelo A", 2015, 12000, EstadoOperativo.DISPONIBLE, 55));
         batallon.agregarVehiculoTransporte(new VehiculoTransporteTropa("VT002", "Transporte Tropa Modelo B", 2018, 8000, EstadoOperativo.EN_MISION, 30));
         batallon.agregarVehiculoTransporte(new VehiculoTransporteTropa("VT003", "Transporte Tropa Modelo C", 2015, 12800, EstadoOperativo.EN_MANTENIMIENTO, 70));
-        batallon.agregarVehiculoTransporte(new VehiculoTransporteTropa("VT004", "Transporte Tropa Modelo D", 2020, 6000, EstadoOperativo.DISPONIBLE, 45));
-        batallon.agregarVehiculoTransporte(new VehiculoTransporteTropa("VT005", "Transporte Tropa Modelo E", 2012, 18000, EstadoOperativo.DISPONIBLE, 60));
-        batallon.agregarVehiculoTransporte(new VehiculoTransporteTropa("VT006", "Transporte Tropa Modelo F", 2015, 14000, EstadoOperativo.EN_MISION, 50));
 
         // Registrar vehículos blindados
         batallon.agregarVehiculoBlindado(new VehiculoBlindado("VB001", "Blindado Modelo A", 2015, 25000, EstadoOperativo.DISPONIBLE, 3));
         batallon.agregarVehiculoBlindado(new VehiculoBlindado("VB002", "Blindado Modelo B", 2012, 30000, EstadoOperativo.EN_MANTENIMIENTO, 0));
         batallon.agregarVehiculoBlindado(new VehiculoBlindado("VB003", "Blindado Modelo C", 2015, 55000, EstadoOperativo.EN_MISION, 1));
-        batallon.agregarVehiculoBlindado(new VehiculoBlindado("VB004", "Blindado Modelo D", 2011, 85000, EstadoOperativo.DISPONIBLE, 2));
-        batallon.agregarVehiculoBlindado(new VehiculoBlindado("VB005", "Blindado Modelo E", 2016, 45000, EstadoOperativo.DISPONIBLE, 3));
-        batallon.agregarVehiculoBlindado(new VehiculoBlindado("VB006", "Blindado Modelo A", 2015, 25000, EstadoOperativo.DISPONIBLE, 60));
 
         // Registrar vehículos de apoyo
         batallon.agregarVehiculoApoyo(new VehiculoApoyo("VA001", "Apoyo Modelo A", 2015, 15000, EstadoOperativo.DISPONIBLE, TipoFuncion.COMUNICACIONES));
         batallon.agregarVehiculoApoyo(new VehiculoApoyo("VA002", "Apoyo Modelo B", 2017, 15400, EstadoOperativo.EN_MISION, TipoFuncion.LOGISTICA));
         batallon.agregarVehiculoApoyo(new VehiculoApoyo("VA003", "Apoyo Modelo C", 2014, 19000, EstadoOperativo.EN_MANTENIMIENTO, TipoFuncion.MEDICO));
-        batallon.agregarVehiculoApoyo(new VehiculoApoyo("VA004", "Apoyo Modelo D", 2019, 11000, EstadoOperativo.DISPONIBLE, TipoFuncion.COMUNICACIONES));
-        batallon.agregarVehiculoApoyo(new VehiculoApoyo("VA005", "Apoyo Modelo E", 2021, 14600, EstadoOperativo.EN_MISION, TipoFuncion.LOGISTICA));
-        batallon.agregarVehiculoApoyo(new VehiculoApoyo("VA006", "Apoyo Modelo F", 2015, 17000, EstadoOperativo.EN_MANTENIMIENTO, TipoFuncion.MEDICO));
 
-        // Registrar misiones (el método ya genera automáticamente el ID)
-        batallon.registrarMision(LocalDate.of(2023, 10, 1), "Zona de conflicto norte", 30, "VT001");
-        batallon.registrarMision(LocalDate.of(2022, 6, 5), "Zona de conflicto B SUR", 25, "VB001");
-        batallon.registrarMision(LocalDate.of(2023, 10, 10), "Zona de conflicto Centro", 20, "VA002");
-        batallon.registrarMision(LocalDate.of(2021, 10, 12), "Zona de conflicto occidente", 65, "VT005");
-        batallon.registrarMision(LocalDate.of(2023, 10, 25), "Zona de conflicto occidente", 30, "VB003");
-        batallon.registrarMision(LocalDate.of(2022, 7, 30), "Zona de conflicto sur", 55, "VT006");
-        batallon.registrarMision(LocalDate.of(2023, 9, 7), "Zona de conflicto centro", 40, "VT002");
-        batallon.registrarMision(LocalDate.of(2023, 12, 1), "Zona de conflicto norte", 30, "VT002");
-        batallon.registrarMision(LocalDate.of(2019, 5, 19), "Zona de conflicto norte", 58, "VT002");
-        batallon.registrarMision(LocalDate.of(2023, 12, 1), "Zona de conflicto norte", 25, "VT002");
-        batallon.registrarMision(LocalDate.of(2024, 11, 28), "Zona de conflicto norte", 70, "VT002");
+
+
+
+        // Crear un soldado disponible
+        Soldado soldado1 = new Soldado("S001", "Juan Pérez", Rango.SARGENTO, Funcion.MEDICO, 20, true);
+        Soldado soldado2 = new Soldado("S002", "Jhon Lopez", Rango.CABOPRIMERO, Funcion.COMUNICACIONES, 22, true);
+        Soldado soldado3 = new Soldado("S003", "Felipe Ramirez", Rango.MAYOR, Funcion.ARTILLERO, 37, true);
+        Soldado soldado4 = new Soldado("S001", "Luis Gonsalez", Rango.SOLDADO, Funcion.MEDICO, 25, true);
+        Soldado soldado5 = new Soldado("S001", "Raul Vallejo", Rango.SOLDADO, Funcion.ENFERMERO, 24, true);
+
+
+        // Registrar misiones (el metodo ya genera automáticamente el ID)
+        batallon.registrarMision(new Mision("mision1",LocalDate.of(2023, 10, 1), "Zona de conflicto norte", 30, "VT001"));
+        batallon.registrarMision(new Mision("mision2",LocalDate.of(2022, 6, 5), "Zona de conflicto  SUR", 25, "VB001"));
+        batallon.registrarMision(new Mision("mision3",LocalDate.of(2023, 10, 10), "Zona de conflicto Centro", 20, "VA002"));
+        batallon.registrarMision(new Mision("mision4",LocalDate.of(2021, 10, 12), "Zona de conflicto occidente", 65, "VT002"));
+        batallon.registrarMision(new Mision("mision5",LocalDate.of(2023, 10, 25), "Zona de conflicto occidente", 30, "VB003"));
+        batallon.registrarMision(new Mision("mision6",LocalDate.of(2022, 7, 30), "Zona de conflicto sur", 55, "VT003"));
+        batallon.registrarMision(new Mision("mision7",LocalDate.of(2023, 9, 7), "Zona de conflicto centro", 40, "VT002"));
+        batallon.registrarMision(new Mision("mision8",LocalDate.of(2023, 12, 1), "Zona de conflicto norte", 30, "VT002"));
+        batallon.registrarMision(new Mision("mision9",LocalDate.of(2019, 5, 19), "Zona de conflicto norte", 58, "VT002"));
+        batallon.registrarMision(new Mision("mision10",LocalDate.of(2023, 12, 1), "Zona de conflicto norte", 25, "VT003"));
+        batallon.registrarMision(new Mision("mision11",LocalDate.of(2024, 11, 28), "Zona de conflicto norte", 70, "VT002"));
 
         // Mostrar información general
         batallon.mostrarInformacion();
+
+
+
+
+
+        // Agregar misión al batallón
+        Mision mision1 = null;
+        batallon.getListMisiones().add(mision1);
+
+        // Asignar soldado a la misión (esto cambia su disponibilidad)
+        batallon.asignarSoldadoAMision("M001", soldado1);
+
+        // Verificación
+        System.out.println("¿Soldado disponible? " + soldado1.isDisponible()); // Debería ser false
+
+
+
+
+        // Asignar soldado a la misión (esto cambia su disponibilidad)
+        batallon.asignarSoldadoAMision("M001", soldado1);
+
+        // Verificación
+        System.out.println("¿Soldado disponible? " + soldado1.isDisponible()); // Debería ser false
+
+        // Mostrar soldados asignados a la misión
+        System.out.println("Soldados asignados a la misión:");
+        for (Soldado s : mision1.getListPersonal()) {
+            System.out.println("- " + s.getNombre() + " (" + s.getRango() + ")");
+        }
 
         // Buscar misiones por ubicación y fecha
         LinkedList<Mision> resultado = batallon.buscarMisionesPorUbicacionYFechas(
@@ -104,7 +135,14 @@ public class Main {
             System.out.println(v.getClass().getSimpleName() + " - Modelo: " + v.getModelo() + " (ID: " + v.getId() + ")");
         }
 
+        // Mostrar vehículos ordenados por misiones
+        System.out.println("Vehículos ordenados por misiones completadas:");
+        batallon.mostrarVehiculosOrdenadosPorMisiones();
+
+
     }
+
+
 
 
 

@@ -3,7 +3,6 @@ package org.example;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.LinkedList;
-import java.util.List;
 
 public class Batallon {
     private String nombre;
@@ -12,6 +11,7 @@ public class Batallon {
     private LinkedList<VehiculoBlindado> listVehiculosBlindados;
     private LinkedList<VehiculoApoyo> listVehiculosApoyo;
     private LinkedList<Mision> listMisiones;
+    private LinkedList<Soldado> listSoldados;
 
     public Batallon(String nombre, String id) {
         this.nombre = nombre;
@@ -20,7 +20,9 @@ public class Batallon {
         this.listVehiculosBlindados = new LinkedList<>();
         this.listVehiculosApoyo = new LinkedList<>();
         this.listMisiones = new LinkedList<>();
+        this.listSoldados = new LinkedList<>();
     }
+
 
 
 
@@ -151,7 +153,7 @@ public class Batallon {
 
 
 
-    // Método para registrar una misión
+    // Metodo para registrar una misión
     public void registrarMision(LocalDate fecha, String ubicacion, int cantidadPersonal, String vehiculoId) {
         Mision mision = new Mision("M" + (listMisiones.size() + 1), fecha, ubicacion, cantidadPersonal, vehiculoId);
         listMisiones.add(mision);
@@ -188,7 +190,7 @@ public class Batallon {
         }
     }
 
-    // Método para mostrar información del batallón
+    // Metodo para mostrar información del batallón
     public void mostrarInformacion() {
         System.out.println("===== INFORMACIÓN DEL BATALLÓN =====");
         System.out.println("Nombre: " + nombre);
@@ -222,6 +224,7 @@ public class Batallon {
         mostrarMisionesRegistradas();
         System.out.println("=======================================");
     }
+
 
     // Métodos para agregar vehículos
     public void agregarVehiculoTransporte(VehiculoTransporteTropa vehiculo) {
@@ -433,9 +436,53 @@ public class Batallon {
                 .thenComparing(Vehiculo::getModelo));
 
         return resultado;
+
     }
 
 
+
+
+
+
+    public void mostrarVehiculosOrdenadosPorMisiones() {
+        LinkedList<Vehiculo> todosLosVehiculos = new LinkedList<>();
+
+        todosLosVehiculos.addAll(listVehiculosTransporteTropa);
+        todosLosVehiculos.addAll(listVehiculosBlindados);
+        todosLosVehiculos.addAll(listVehiculosApoyo);
+
+        todosLosVehiculos.sort((v1, v2) -> Integer.compare(v2.getMisionesCompletadas(), v1.getMisionesCompletadas()));
+
+        for (Vehiculo v : todosLosVehiculos) {
+            System.out.println("ID: " + v.getId()
+                    + " | Modelo: " + v.getModelo()
+                    + " | Tipo: " + v.getClass().getSimpleName()
+                    + " | Misiones completadas: " + v.getMisionesCompletadas());
+        }
+    }
+
+
+
+    public void asignarSoldadoAMision(String idMision, Soldado soldado) {
+        for (Mision mision : listMisiones) {
+            if (mision.getId().equals(idMision)) {
+                if (soldado.isDisponible()) {
+                    mision.agregarSoldado(soldado);
+                    soldado.setDisponible(false);
+                    System.out.println("Soldado asignado a la misión " + idMision);
+                } else {
+                    System.out.println("El soldado no está disponible para ser asignado.");
+                }
+                return;
+            }
+        }
+        System.out.println("Misión no encontrada con ID: " + idMision);
+    }
+
+
+    public void registrarMision(Mision mision) {
+        this.listMisiones.add(mision);
+    }
 }
 
 
