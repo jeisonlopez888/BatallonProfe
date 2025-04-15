@@ -14,7 +14,7 @@ public class BatallonTest {
     public void testRegistrarMision() {
         LOG.info("testRegistrarMision inicio");
 
-        Batallon batallon = new Batallon("Batallón Norte", "BN001");
+        Batallon batallon = new Batallon("Batallón 1", "B001");
 
         // Crear soldados
         Soldado soldado1 = new Soldado("S001", "Juan Torres", Rango.CABOPRIMERO, Funcion.ARTILLERO, 28, true);
@@ -198,7 +198,7 @@ public class BatallonTest {
         batallon.getListSoldados().add(soldado2);
         batallon.getListSoldados().add(soldado3);
 
-        // Ejecutar método
+        // Ejecutar metodo
         LinkedList<Soldado> resultado = batallon.obtenerSoldadosPorFuncion(Funcion.ARTILLERO);
 
         // Validar que solo se obtienen los soldados con función INFANTERIA
@@ -228,7 +228,7 @@ public class BatallonTest {
         batallon.getListSoldados().add(soldado2);
         batallon.getListSoldados().add(soldado3);
 
-        // Ejecutar método para rango CABO
+        // Ejecutar metodo para rango CABO
         LinkedList<Soldado> resultado = batallon.obtenerSoldadosPorRango(Rango.CABOPRIMERO);
 
         // Validaciones
