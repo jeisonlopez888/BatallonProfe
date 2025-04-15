@@ -12,34 +12,57 @@ public class Mision {
     private String vehiculoId;
     private LinkedList<Soldado>listPersonal;// ID del vehículo involucrado
 
-    public Mision(String id, LocalDate fecha, String ubicacion, int cantidadPersonal, String vehiculoId) {
+
+    public Mision(String id, LocalDate fecha, String ubicacion, int cantidadPersonal, String vehiculoId,  LinkedList<Soldado> listPersonal) {
         this.id = id;
         this.fecha = fecha;
         this.ubicacion = ubicacion;
         this.cantidadPersonal = cantidadPersonal;
         this.vehiculoId = vehiculoId;
-        this.listPersonal = new LinkedList<>();
+        this.listPersonal = listPersonal;
     }
 
-    // Métodos getters
+
+
+
     public String getId() {
         return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public LocalDate getFecha() {
         return fecha;
     }
 
+    public void setFecha(LocalDate fecha) {
+        this.fecha = fecha;
+    }
+
     public String getUbicacion() {
         return ubicacion;
+    }
+
+    public void setUbicacion(String ubicacion) {
+        this.ubicacion = ubicacion;
     }
 
     public int getCantidadPersonal() {
         return cantidadPersonal;
     }
 
+    public void setCantidadPersonal(int cantidadPersonal) {
+        this.cantidadPersonal = cantidadPersonal;
+    }
+
     public String getVehiculoId() {
         return vehiculoId;
+    }
+
+    public void setVehiculoId(String vehiculoId) {
+        this.vehiculoId = vehiculoId;
     }
 
     public LinkedList<Soldado> getListPersonal() {
@@ -50,14 +73,40 @@ public class Mision {
         this.listPersonal = listPersonal;
     }
 
-    // metodo para agregar un soldado a una mision
+
+
     public void agregarSoldado(Soldado soldado) {
         if (soldado.isDisponible()) {
-            listPersonal.add(soldado);
-            soldado.setDisponible(false); // Marcar como no disponible
+            if (listPersonal.size() < cantidadPersonal) {  // Verificar si hay espacio en la misión
+                listPersonal.add(soldado);
+                soldado.setDisponible(false); // Marcar como no disponible
+            } else {
+                System.out.println("No hay suficiente espacio para más soldados en esta misión.");
+            }
+        } else {
+            System.out.println("El soldado no está disponible.");
         }
     }
+
+    public void eliminarSoldado(Soldado soldado) {
+        if (listPersonal.remove(soldado)) {
+            soldado.setDisponible(true); // Marcar como disponible nuevamente
+        } else {
+            System.out.println("El soldado no está asignado a esta misión.");
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "Misión: " + id + ", Fecha: " + fecha + ", Ubicación: " + ubicacion + ", Vehículo ID: " + vehiculoId + ", Personal asignado: " + listPersonal.size() + "/" + cantidadPersonal;
+    }
+
+
+    public String getListaSoldados() {
+        return listPersonal.toString();
+    }
 }
+
 
 
 

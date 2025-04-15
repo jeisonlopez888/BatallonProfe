@@ -1,5 +1,7 @@
 package org.example;
 
+
+
 public class Soldado {
     private String id;
     private String nombre;
@@ -44,4 +46,7 @@ public class Soldado {
     public void setDisponible(boolean disponible) {
         this.disponible = disponible;
     }
+
+
+
 }

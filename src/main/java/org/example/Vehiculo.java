@@ -11,12 +11,12 @@ public abstract class Vehiculo {
     protected EstadoOperativo estadoOperativo;
     protected LinkedList<Mision> listMisiones;
 
-    public Vehiculo(String id, String modelo, int anioFabricacion, double kilometraje, EstadoOperativo estadoOperativo) {
+    public Vehiculo(String id, String modelo, int anioFabricacion, double kilometraje,int misionesCompletadas, EstadoOperativo estadoOperativo) {
         this.id = id;
         this.modelo = modelo;
         this.anioFabricacion = anioFabricacion;
         this.kilometraje = kilometraje;
-        this.misionesCompletadas = 0;
+        this.misionesCompletadas = misionesCompletadas;
         this.estadoOperativo = estadoOperativo;
 
         this.listMisiones = new LinkedList<>();

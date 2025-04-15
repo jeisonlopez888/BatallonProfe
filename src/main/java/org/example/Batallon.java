@@ -4,26 +4,30 @@ import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.LinkedList;
 
+
 public class Batallon {
     private String nombre;
     private String id;
+    private LinkedList<Mision> listMisionesCompletadas;
     private LinkedList<VehiculoTransporteTropa> listVehiculosTransporteTropa;
     private LinkedList<VehiculoBlindado> listVehiculosBlindados;
     private LinkedList<VehiculoApoyo> listVehiculosApoyo;
     private LinkedList<Mision> listMisiones;
     private LinkedList<Soldado> listSoldados;
 
+
+
     public Batallon(String nombre, String id) {
         this.nombre = nombre;
         this.id = id;
+        this.listMisionesCompletadas = new LinkedList<>();
         this.listVehiculosTransporteTropa = new LinkedList<>();
         this.listVehiculosBlindados = new LinkedList<>();
         this.listVehiculosApoyo = new LinkedList<>();
         this.listMisiones = new LinkedList<>();
         this.listSoldados = new LinkedList<>();
+
     }
-
-
 
 
     // ================== CRUD Transporte Tropas ==================
@@ -34,8 +38,7 @@ public class Batallon {
     public VehiculoTransporteTropa leerVehiculoTransporte(String id) {
         for (VehiculoTransporteTropa v : listVehiculosTransporteTropa) {
             if (v.getId().equals(id)) return v;
-        }
-        return null;
+        }return null;
     }
 
     public boolean actualizarVehiculoTransporte(String id, VehiculoTransporteTropa nuevo) {
@@ -44,8 +47,7 @@ public class Batallon {
                 listVehiculosTransporteTropa.set(i, nuevo);
                 return true;
             }
-        }
-        return false;
+        }return false;
     }
 
     public boolean eliminarVehiculoTransporte(String id) {
@@ -60,8 +62,7 @@ public class Batallon {
     public VehiculoBlindado leerVehiculoBlindado(String id) {
         for (VehiculoBlindado v : listVehiculosBlindados) {
             if (v.getId().equals(id)) return v;
-        }
-        return null;
+        }return null;
     }
 
     public boolean actualizarVehiculoBlindado(String id, VehiculoBlindado nuevo) {
@@ -70,8 +71,7 @@ public class Batallon {
                 listVehiculosBlindados.set(i, nuevo);
                 return true;
             }
-        }
-        return false;
+        }return false;
     }
 
     public boolean eliminarVehiculoBlindado(String id) {
@@ -142,53 +142,57 @@ public class Batallon {
         return todos;
     }
 
+    public LinkedList<Soldado> getTodosLosSoldados() {
+        return listSoldados;
+    }
 
 
 
+    public void registrarMision(String id, LocalDate fecha, String ubicacion, int cantidadPersonal, String vehiculoId, LinkedList<Soldado> listPersonal) {
+        // Verificar que los parámetros no sean nulos
+        if (id== null || fecha == null || ubicacion == null || vehiculoId == null || listPersonal == null) {
+            System.out.println("Error: La fecha, ubicación, ID del vehículo o lista de personal no pueden ser nulos.");
+            return;
+        }
+
+        // Verificar que la cantidad de personal no sea mayor que el tamaño de la lista de soldados
+        if (cantidadPersonal > listPersonal.size()) {
+            System.out.println("Error: La cantidad de personal no puede ser mayor que el número de soldados disponibles.");
+            return;
+        }
+
+        // Crear una nueva misión
+        LinkedList<Soldado> soldadosAsignados = new LinkedList<>();
+        for (int i = 0; i < cantidadPersonal; i++) {
+            soldadosAsignados.add(listPersonal.get(i));
+        }
+
+        Mision mision = new Mision(id + (listMisiones.size() + 1), fecha, ubicacion, cantidadPersonal, vehiculoId, soldadosAsignados);
 
 
 
-
-
-
-
-
-    // Metodo para registrar una misión
-    public void registrarMision(LocalDate fecha, String ubicacion, int cantidadPersonal, String vehiculoId) {
-        Mision mision = new Mision("M" + (listMisiones.size() + 1), fecha, ubicacion, cantidadPersonal, vehiculoId);
-        listMisiones.add(mision);
 
         // Aumentar el contador de misiones completadas del vehículo utilizado
-        for (VehiculoTransporteTropa transporte : listVehiculosTransporteTropa) {
-            if (transporte.getId().equals(vehiculoId)) {
-                transporte.setMisionesCompletadas(transporte.getMisionesCompletadas() + 1);
-                return;
-            }
+        if (!actualizarMisionesVehiculo(vehiculoId)) {
+            System.out.println("Error: No se encontró el vehículo con ID " + vehiculoId);
         }
-        for (VehiculoBlindado blindado : listVehiculosBlindados) {
-            if (blindado.getId().equals(vehiculoId)) {
-                blindado.setMisionesCompletadas(blindado.getMisionesCompletadas() + 1);
-                return;
-            }
-        }
-        for (VehiculoApoyo apoyo : listVehiculosApoyo) {
-            if (apoyo.getId().equals(vehiculoId)) {
-                apoyo.setMisionesCompletadas(apoyo.getMisionesCompletadas() + 1);
-                return;
-            }
-        }
+
+        listMisiones.add(mision);
     }
 
-    // Métodos para mostrar misiones
-    public void mostrarMisionesRegistradas() {
-        System.out.println("Misiones Registradas:");
-        for (Mision m : listMisiones) {
-            System.out.println("ID: " + m.getId() + ", Fecha: " + m.getFecha() +
-                    ", Ubicación: " + m.getUbicacion() +
-                    ", Personal: " + m.getCantidadPersonal() +
-                    ", Vehículo Asignado: " + m.getVehiculoId());
-        }
+    private boolean actualizarMisionesVehiculo(String vehiculoId) {
+        // Intentamos buscar y actualizar en los tres tipos de vehículos
+        boolean vehiculoEncontrado = false;
+
+        for (Vehiculo v : getTodosLosVehiculos()) {
+            if (v.getId().equals(vehiculoId)) {
+                v.setMisionesCompletadas(v.getMisionesCompletadas() + 1);
+                vehiculoEncontrado = true;
+                break;
+            }
+        }return vehiculoEncontrado;
     }
+
 
     // Metodo para mostrar información del batallón
     public void mostrarInformacion() {
@@ -199,7 +203,7 @@ public class Batallon {
         System.out.println("\n--- Vehículos de Transporte de Tropas ---");
         for (VehiculoTransporteTropa v : listVehiculosTransporteTropa) {
             System.out.println("ID: " + v.getId() + ", Modelo: " + v.getModelo() + ", Año: " + v.getAnioFabricacion() +
-                    ", Kilometraje: " + v.getKilometraje() + ", Estado: " + v.getEstadoOperativo() +
+                    ", Kilometraje: " + v.getKilometraje() + ",Misiones Completadas: " + v.getMisionesCompletadas()+", Estado: " + v.getEstadoOperativo() +
                     ", Capacidad: " + v.getCapacidadSoldados());
         }
         System.out.printf("Kilometraje promedio: %.2f km\n", calcularKilometrajePromedioTransporteTropa());
@@ -207,7 +211,7 @@ public class Batallon {
         System.out.println("\n--- Vehículos Blindados ---");
         for (VehiculoBlindado v : listVehiculosBlindados) {
             System.out.println("ID: " + v.getId() + ", Modelo: " + v.getModelo() + ", Año: " + v.getAnioFabricacion() +
-                    ", Kilometraje: " + v.getKilometraje() + ", Estado: " + v.getEstadoOperativo() +
+                    ", Kilometraje: " + v.getKilometraje() + ",Misiones Completadas: " + v.getMisionesCompletadas()+", Estado: " + v.getEstadoOperativo() +
                     ", Nivel Blindaje: " + v.getNivelBlindaje());
         }
         System.out.printf("Kilometraje promedio: %.2f km\n", calcularKilometrajePromedioBlindados());
@@ -215,16 +219,12 @@ public class Batallon {
         System.out.println("\n--- Vehículos de Apoyo ---");
         for (VehiculoApoyo v : listVehiculosApoyo) {
             System.out.println("ID: " + v.getId() + ", Modelo: " + v.getModelo() + ", Año: " + v.getAnioFabricacion() +
-                    ", Kilometraje: " + v.getKilometraje() + ", Estado: " + v.getEstadoOperativo() +
+                    ", Kilometraje: " + v.getKilometraje() + ",Misiones Completadas: " + v.getMisionesCompletadas()+", Estado: " + v.getEstadoOperativo() +
                     ", Tipo Función: " + v.getTipoFuncion());
         }
         System.out.printf("Kilometraje promedio: %.2f km\n", calcularKilometrajePromedioApoyo());
 
-        System.out.println("\n--- Misiones Registradas ---");
-        mostrarMisionesRegistradas();
-        System.out.println("=======================================");
     }
-
 
     // Métodos para agregar vehículos
     public void agregarVehiculoTransporte(VehiculoTransporteTropa vehiculo) {
@@ -260,9 +260,13 @@ public class Batallon {
         return listVehiculosTransporteTropa;
     }
 
-    public void setListVehiculosTransporteTropa(LinkedList<VehiculoTransporteTropa> listVehiculosTransporteTropa) {
-        this.listVehiculosTransporteTropa = listVehiculosTransporteTropa;
+    public void setVehiculosTransporteTropa(VehiculoTransporteTropa[] vehiculosTransporteTropa) {
+        listVehiculosTransporteTropa.clear();
+        for (VehiculoTransporteTropa v : vehiculosTransporteTropa) {
+            listVehiculosTransporteTropa.add(v);
+        }
     }
+
 
     public LinkedList<VehiculoBlindado> getListVehiculosBlindados() {
         return listVehiculosBlindados;
@@ -336,7 +340,6 @@ public class Batallon {
         return misionesFiltradas;
     }
 
-
     public Vehiculo getVehiculoConMasMisiones() {
         Vehiculo vehiculoConMasMisiones = null;
         int maxMisiones = -1;
@@ -372,26 +375,25 @@ public class Batallon {
         return listVehiculosTransporteTropa;
     }
 
-
     public void eliminarVehiculo(String id) {
         for (VehiculoTransporteTropa v : listVehiculosTransporteTropa) {
             if (v.getId().equalsIgnoreCase(id)) {
                 listVehiculosTransporteTropa.remove(v);
-                System.out.println("Vehículo de transporte con ID " + id + " eliminado correctamente.");
+                System.out.println("\nVehículo de transporte con ID " + id + " eliminado correctamente.");
                 return;
             }
         }
         for (VehiculoBlindado v : listVehiculosBlindados) {
             if (v.getId().equalsIgnoreCase(id)) {
                 listVehiculosBlindados.remove(v);
-                System.out.println("Vehículo blindado con ID " + id + " eliminado correctamente.");
+                System.out.println("\nVehículo blindado con ID " + id + " eliminado correctamente.");
                 return;
             }
         }
         for (VehiculoApoyo v : listVehiculosApoyo) {
             if (v.getId().equalsIgnoreCase(id)) {
                 listVehiculosApoyo.remove(v);
-                System.out.println("Vehículo de apoyo con ID " + id + " eliminado correctamente.");
+                System.out.println("\nVehículo de apoyo con ID " + id + " eliminado correctamente.");
                 return;
             }
         }
@@ -399,11 +401,9 @@ public class Batallon {
         System.out.println("No se encontró ningún vehículo con el ID " + id + ".");
     }
 
-
     public LinkedList<VehiculoTransporteTropa> getVehiculosTransporteTropa() {
         return listVehiculosTransporteTropa;
     }
-
 
     public void setVehiculosTransporteTropa(Vehiculo[] vehiculosTransporteTropa) {
         listVehiculosTransporteTropa = new LinkedList<>();
@@ -413,8 +413,6 @@ public class Batallon {
             }
         }
     }
-
-
 
     public LinkedList<Vehiculo> getVehiculosPorAnioOrdenados(int anio) {
         LinkedList<Vehiculo> resultado = new LinkedList<>();
@@ -439,11 +437,6 @@ public class Batallon {
 
     }
 
-
-
-
-
-
     public void mostrarVehiculosOrdenadosPorMisiones() {
         LinkedList<Vehiculo> todosLosVehiculos = new LinkedList<>();
 
@@ -454,36 +447,187 @@ public class Batallon {
         todosLosVehiculos.sort((v1, v2) -> Integer.compare(v2.getMisionesCompletadas(), v1.getMisionesCompletadas()));
 
         for (Vehiculo v : todosLosVehiculos) {
-            System.out.println("ID: " + v.getId()
+            System.out.println("\nID: " + v.getId()
                     + " | Modelo: " + v.getModelo()
                     + " | Tipo: " + v.getClass().getSimpleName()
                     + " | Misiones completadas: " + v.getMisionesCompletadas());
         }
     }
 
-
-
-    public void asignarSoldadoAMision(String idMision, Soldado soldado) {
+    public void asignarSoldadoAMision(String id, Soldado soldado) {
         for (Mision mision : listMisiones) {
-            if (mision.getId().equals(idMision)) {
+            if (mision.getId().equals(id)) {
                 if (soldado.isDisponible()) {
                     mision.agregarSoldado(soldado);
                     soldado.setDisponible(false);
-                    System.out.println("Soldado asignado a la misión " + idMision);
+                    System.out.println("\nSoldado asignado a la misión " + getListMisiones());
                 } else {
-                    System.out.println("El soldado no está disponible para ser asignado.");
+                    System.out.println("\nEl soldado no está disponible para ser asignado.");
                 }
                 return;
             }
         }
-        System.out.println("Misión no encontrada con ID: " + idMision);
+        System.out.println("\nMisión no encontrada con ID: " + getListMisiones());
     }
 
 
-    public void registrarMision(Mision mision) {
-        this.listMisiones.add(mision);
+    public void liberarSoldadosDeMision(String idMision) {
+        boolean misionEncontrada = false;
+
+        for (Mision mision : listMisiones) {
+            if (mision.getId().equals(idMision)) {
+                misionEncontrada = true;
+
+                System.out.println("✔ Liberando soldados de la misión: " + idMision);
+
+                for (Soldado s : mision.getListPersonal()) {
+                    s.setDisponible(true); // marcar como disponible
+                    System.out.println("\n- Liberado: " + s.getNombre() + " (" + s.getRango() + ")");
+                }
+
+                break;
+            }
+        }
+
+        if (!misionEncontrada) {
+            System.out.println("❌ No se encontró la misión con ID " + idMision);
+            return;
+        }
+
+        // Mostrar soldados disponibles (todos los que estén marcados como disponibles)
+        System.out.println("\n🟢 Soldados disponibles:");
+        for (Soldado s : getTodosLosSoldados()) {
+            if (s.isDisponible()) {
+                System.out.println("- " + s.getNombre() + " (" + s.getRango() + ")");
+            }
+        }
+
+        // Mostrar soldados que aún no han sido liberados
+        System.out.println("\n🔴 Soldados aún en misión:");
+        for (Soldado s : getTodosLosSoldados()) {
+            if (!s.isDisponible()) {
+                System.out.println("- " + s.getNombre() + " (" + s.getRango() + ")");
+            }
+        }
+    }
+
+
+
+    public LinkedList<Soldado> obtenerSoldadosPorFuncion(Funcion funcion) {
+        LinkedList<Soldado> soldadosFiltrados = new LinkedList<>();
+        for (Soldado s : listSoldados) {
+            if (s.getFuncion() == funcion) {
+                soldadosFiltrados.add(s);
+            }
+        }
+        return soldadosFiltrados;
+    }
+
+    public void mostrarSoldadosPorFuncion(Funcion funcion) {
+        LinkedList<Soldado> soldados = obtenerSoldadosPorFuncion(funcion);
+        System.out.println("\nSoldados con función: " + funcion);
+        if (soldados.isEmpty()) {
+            System.out.println("No hay soldados con esta función.");
+        } else {
+            for (Soldado s : soldados) {
+                System.out.println("\nID: " + s.getId() + "\n, Nombre: " + s.getNombre() +
+                        "\n, Rango: " + s.getRango() + "\n, Edad: " + s.getEdad());
+            }
+        }
+    }
+
+
+
+    public void asignarSoldadoAMision(Soldado soldado1) {
+    }
+
+    public void agregarSoldado(Soldado soldado) {
+        listSoldados.add(soldado);
+    }
+
+    public void mostrarSoldadosPorFuncion() {
+
+    }
+
+    public void setListVehiculosTransporteTropa(LinkedList<VehiculoTransporteTropa> listVehiculosTransporteTropa) {
+        this.listVehiculosTransporteTropa = listVehiculosTransporteTropa;
+    }
+
+    public LinkedList<Soldado> getListSoldados() {
+        return listSoldados;
+    }
+
+    public void setListSoldados(LinkedList<Soldado> listSoldados) {
+        this.listSoldados = listSoldados;
+    }
+
+
+    public LinkedList<Soldado> obtenerSoldadosPorRango(Rango rango) {
+        LinkedList<Soldado> soldadosFiltrados = new LinkedList<>();
+        for (Soldado s : listSoldados) {
+            if (s.getRango() == rango) {
+                soldadosFiltrados.add(s);
+            }
+        }
+        return soldadosFiltrados;
+    }
+
+    public void mostrarSoldadosPorRango(Rango rango) {
+        LinkedList<Soldado> soldados = obtenerSoldadosPorRango(rango);
+        System.out.println("\nSoldados con Rango: " + rango);
+        if (soldados.isEmpty()) {
+            System.out.println("No hay soldados con este rango.");
+        } else {
+            for (Soldado s : soldados) {
+                System.out.println("\nID: " + s.getId() + "\n, Nombre: " + s.getNombre() +
+                        "\n, Rango: " + s.getRango() + "\n, Edad: " + s.getEdad());
+            }
+        }
+    }
+    public LinkedList<Mision> getListMisionesCompletadas() {
+        return listMisionesCompletadas;
+    }
+
+    public void setListMisionesCompletadas(LinkedList<Mision> listMisionesCompletadas) {
+        this.listMisionesCompletadas = listMisionesCompletadas;
+    }
+
+
+    public double calcularEdadPromedio() {
+        if (listSoldados.isEmpty()) {
+            return 0.0; // Para evitar división por cero
+        }
+
+        int sumaEdades = 0;
+
+        for (Soldado s : listSoldados) {
+            sumaEdades += s.getEdad();
+        }
+
+        return (double) sumaEdades / listSoldados.size();
+    }
+
+    public Soldado buscarSoldadoPorId(String id) {
+        for (Soldado s : listSoldados) {
+            if (s.getId().equalsIgnoreCase(id)) {
+                return s;
+            }
+        }
+        return null; // No se encontró
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

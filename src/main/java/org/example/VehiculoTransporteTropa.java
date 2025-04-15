@@ -3,15 +3,10 @@ package org.example;
 public class VehiculoTransporteTropa extends Vehiculo {
     private int capacidadSoldados;
 
-    public VehiculoTransporteTropa(String id, String modelo, int anioFabricacion, double kilometraje, EstadoOperativo estadoOperativo, int capacidadSoldados) {
-        super(id, modelo, anioFabricacion, kilometraje, estadoOperativo);
-
+    public VehiculoTransporteTropa(String id, String modelo, int anioFabricacion, double kilometraje, int misionesCompletadas, EstadoOperativo estadoOperativo, int capacidadSoldados) {
+        super(id, modelo, anioFabricacion, kilometraje, misionesCompletadas, estadoOperativo);
         this.capacidadSoldados = capacidadSoldados;
     }
-
-
-
-
 
     @Override
     public void desplazar() {
